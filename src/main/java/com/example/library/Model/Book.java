@@ -25,27 +25,20 @@ public class Book {
     String author;
     @Column(name="topic_book")
     String topic;
-    @JsonIgnore
     Long createUser;
-    @JsonIgnore
     Long updateUser;
-    @JsonIgnore
     Date createdate;
-    @JsonIgnore
     Date updatedate;
 
     @Lob
     @Type(type = "org.hibernate.type.BinaryType")
-    @JsonIgnore
     byte[] pic;
 
     @ManyToOne
     @JoinColumn(name = "cid",referencedColumnName = "id")
-    @JsonIgnore
     private CustomUser customuser;
 
     @OneToMany(mappedBy = "book",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<Post> posts;
 
     public Book() {
