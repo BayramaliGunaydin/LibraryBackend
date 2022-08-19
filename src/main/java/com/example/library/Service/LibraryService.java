@@ -23,9 +23,9 @@ import java.util.logging.Logger;
 @Service
 public class LibraryService implements ILibraryService{
     Logger logger = Logger.getLogger("MyLog");
-    @Value("${spring.rabbitmq.routingKey}")
+   /* @Value("${spring.rabbitmq.routingKey}")
     private String routingName;
-    @Value("${spring.rabbitmq.Exchange}")
+    @Value("${spring.rabbitmq.Exchange}")*/
     private String exchange;
     @Autowired
     private BookRepository bookrepository;
@@ -37,7 +37,7 @@ public class LibraryService implements ILibraryService{
     @Autowired
     private ImageRepository imageRepository;
 
-    @RabbitListener(queues = "${spring.rabbitmq.Queue}")
+ /*   @RabbitListener(queues = "${spring.rabbitmq.Queue}")
     public void message(Message message) throws InterruptedException {
         TimeUnit.SECONDS.sleep(15L);
         logger.info(message.toString());
@@ -48,7 +48,7 @@ public class LibraryService implements ILibraryService{
     public void messagesend2(String message) throws InterruptedException {
         TimeUnit.SECONDS.sleep(15L);
         logger.info(message);
-    }
+    }*/
 
 
     public List<Book> getall() {

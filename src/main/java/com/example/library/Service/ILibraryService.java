@@ -15,8 +15,8 @@ public interface ILibraryService {
     public Optional<Book> getsingle(Long id);
     public void delete(Long id);
     public Book update(Long id, Book book);
-    public void messagesend(String message);
-    public void messagesend2(String message) throws InterruptedException;
+   /* public void messagesend(String message);
+    public void messagesend2(String message) throws InterruptedException;*/
     public void addbooktouser(Long id,Long bookid);
     public List<Book> userbooks(Long id);
     public void deletebookfromuser(Long id, Long bookid);
