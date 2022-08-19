@@ -36,6 +36,7 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "cid",referencedColumnName = "id")
+    @JsonIgnore
     private CustomUser customuser;
 
     @OneToMany(mappedBy = "book",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
