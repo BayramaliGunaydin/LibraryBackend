@@ -40,6 +40,7 @@ public class Book {
     private CustomUser customuser;
 
     @OneToMany(mappedBy = "book",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Post> posts;
 
     public Book() {
