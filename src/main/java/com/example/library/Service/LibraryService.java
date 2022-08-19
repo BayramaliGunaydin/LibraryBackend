@@ -57,15 +57,16 @@ public class LibraryService implements ILibraryService{
     }
 
 
-    @RabbitListener(queues = "${spring.rabbitmq.SaveQueue}")
+  /*  @RabbitListener(queues = "${spring.rabbitmq.SaveQueue}")
     public void addbookListener(Book newbook) throws InterruptedException {
         TimeUnit.SECONDS.sleep(15L);
         bookrepository.save(newbook);
-    }
+    }*/
 
     @Override
     public void addbook(Book newbook) {
-        rabbitTemplate.convertAndSend(exchange,routingName,newbook);
+        bookrepository.save(newbook);
+      //  rabbitTemplate.convertAndSend(exchange,routingName,newbook);
     }
 
     @Override

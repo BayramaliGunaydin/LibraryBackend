@@ -44,14 +44,14 @@ public class LibraryController {
         List<Book> bookList = libraryService.getall();
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
-    @PostMapping("/message")
+    /*@PostMapping("/message")
     public void getmessage(@RequestBody CustomMessage message){
         libraryService.messagesend(message.getMessage());
     }
     @PostMapping("/message2")
     public void getmessage2(@RequestBody CustomMessage message) throws InterruptedException {
             libraryService.messagesend2(message.getMessage());
-        }
+        }*/
 
 
     @PostMapping("/addbook")
