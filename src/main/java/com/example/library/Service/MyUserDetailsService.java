@@ -5,11 +5,9 @@ import com.example.library.Exception.IdNotFoundException;
 import com.example.library.Model.CustomUser;
 import com.example.library.Repository.RoleRepository;
 import com.example.library.Repository.UserRepository;
-import com.example.library.Service.IMyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -46,5 +44,13 @@ public class MyUserDetailsService implements IMyUserDetailsService {
         else{
             throw new IdNotFoundException();
         }
+    }
+
+    public CustomUser getOneUserById(Long userId) {
+        return userRepo.findById(userId).orElse(null);
+    }
+
+    public Optional<CustomUser> getOneUserByUserName(String userName) {
+        return userRepo.findByUsername(userName);
     }
 }

@@ -43,6 +43,10 @@ public class Book {
     @JsonIgnore
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "booklike",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Like> likes;
+
     public Book() {
     }
 

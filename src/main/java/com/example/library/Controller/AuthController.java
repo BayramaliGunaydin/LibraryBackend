@@ -8,10 +8,13 @@ import com.example.library.Model.LoginCredentials;
 import com.example.library.Model.Role;
 import com.example.library.Repository.RoleRepository;
 import com.example.library.Repository.UserRepository;
+import com.example.library.Response.AuthResponse;
+import com.example.library.Service.IMyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +31,11 @@ public class AuthController {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private IMyUserDetailsService IMyUserDetailsService;
 
     @PostMapping("/register")
-    public Map<String, Object> registerHandler(@RequestBody CustomUser user) throws UsernameAlreadyExistException {
+    @CrossOrigin(origins = "http://localhost:3000")
+    public AuthResponse registerHandler(@RequestBody CustomUser user) throws UsernameAlreadyExistException {
 
         if(userRepo.findByUsername(user.getUsername()).isPresent()){
 
@@ -43,13 +48,18 @@ public class AuthController {
             user.setRole(role.get());
             user = userRepo.save(user);
             String token = jwtUtil.generateToken(user.getUsername());
-            return Collections.singletonMap("jwt-token", token);
+            AuthResponse ar= new AuthResponse();
+            ar.setMessage(token);
+            ar.setId(user.getId());
+            ar.setPic(user.getPic());
+            return ar;
         }
 
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body){
+    public AuthResponse loginHandler(@RequestBody LoginCredentials body){
         try {
             UsernamePasswordAuthenticationToken authInputToken =
                     new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword());
@@ -57,8 +67,13 @@ public class AuthController {
             authManager.authenticate(authInputToken);
 
             String token = jwtUtil.generateToken(body.getUsername());
-
-            return Collections.singletonMap("jwt-token", token);
+            AuthResponse ar= new AuthResponse();
+            Optional<CustomUser> user = IMyUserDetailsService.getOneUserByUserName(body.getUsername());
+            ar.setMessage(token);
+            ar.setId(user.get().getId());
+            ar.setPic(user.get().getPic());
+            ar.setRole(user.get().getRole());
+            return ar;
         }catch (AuthenticationException authExc){
             throw new UsernamePasswordNotFoundException();
         }

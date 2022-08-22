@@ -4,20 +4,28 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Entity
 @Getter
 @Setter
-public class Post {
+@Entity
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     @ManyToOne
     @JoinColumn(name = "bookid",referencedColumnName = "id_book")
-    Book book;
+    Book booklike;
     @ManyToOne
     @JoinColumn(name = "userid",referencedColumnName = "id")
-    CustomUser customuser;
-    String post;
+    CustomUser customuserlike;
+
+    public Like(){
+
+    }
+
+    public Like(Book book,CustomUser user){
+        this.booklike=book;
+        this.customuserlike=user;
+    }
 }

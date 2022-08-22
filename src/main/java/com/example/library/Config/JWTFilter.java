@@ -31,7 +31,7 @@ public class JWTFilter extends OncePerRequestFilter {
         if(authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")){
             String jwt = authHeader.substring(7);
             if(jwt == null || jwt.isBlank()){
-                throw new NullJWTException();
+            //    throw new NullJWTException();
             }else {
                 try{
                     String username = jwtUtil.validateTokenAndRetrieveSubject(jwt);
@@ -42,7 +42,7 @@ public class JWTFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }catch(JWTVerificationException exc){
-                    throw new JWTNotFoundException();
+                 //   throw new JWTNotFoundException();
                 }
             }
         }

@@ -1,16 +1,15 @@
 package com.example.library.Service;
 
-import com.example.library.Model.Book;
-import com.example.library.Model.GetAllRequest;
-import com.example.library.Model.Image;
-import com.example.library.Model.Post;
+import com.example.library.Model.*;
 import com.example.library.Repository.BookRepository;
+import com.example.library.Response.BookResponse;
+import com.example.library.Response.LikeResponse;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ILibraryService {
-    public List<Book> getall();
+    public List<BookResponse> getall();
     public void addbook(Book newbook);
     public Optional<Book> getsingle(Long id);
     public void delete(Long id);
@@ -21,4 +20,10 @@ public interface ILibraryService {
     public List<Book> userbooks(Long id);
     public void deletebookfromuser(Long id, Long bookid);
     public List<Post> userposts(Long id);
+    public List<Post> bookposts(Long id);
+    public CustomUser getuser(Long id);
+    public void addposttobook(Post post);
+
+    public void saveuserimage(Long id,base64 base64);
+    public List<Like> userlikes(Long id);
 }

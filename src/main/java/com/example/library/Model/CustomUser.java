@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
+import org.hibernate.annotations.Type;
 
 
 import javax.persistence.*;
@@ -28,6 +28,9 @@ public class CustomUser {
     private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
+    byte[] pic;
 
     @OneToMany(mappedBy = "customuser",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -39,6 +42,10 @@ public class CustomUser {
     @OneToMany(mappedBy = "customuser",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Post> posts;
+
+    @OneToMany(mappedBy = "customuserlike",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Like> likes;
 
 
 

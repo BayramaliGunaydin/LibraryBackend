@@ -2,15 +2,17 @@ package com.example.library.Service;
 
 import com.example.library.Exception.IdNotFoundException;
 import com.example.library.Model.*;
-import com.example.library.Repository.BookRepository;
-import com.example.library.Repository.ImageRepository;
-import com.example.library.Repository.UserRepository;
+import com.example.library.Repository.*;
+import com.example.library.Response.BookResponse;
+import com.example.library.Response.LikeResponse;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.InputStream;
 import java.util.Base64;
@@ -18,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,6 +40,13 @@ public class LibraryService implements ILibraryService{
 
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
+    private LikeService likeService;
 
  /*   @RabbitListener(queues = "${spring.rabbitmq.Queue}")
     public void message(Message message) throws InterruptedException {
@@ -51,9 +62,11 @@ public class LibraryService implements ILibraryService{
     }*/
 
 
-    public List<Book> getall() {
-
-        return bookrepository.findAll();
+    public List<BookResponse> getall() {
+        List<Book> bookList = bookrepository.findAll();
+        return bookList.stream().map(p -> {
+                    List<LikeResponse> responselist= likeService.getbookslikes(p.getid());
+                    return new BookResponse(p,responselist);}).collect(Collectors.toList());
     }
 
 
@@ -113,7 +126,28 @@ public class LibraryService implements ILibraryService{
 
     }
      public List<Post> userposts(Long id){
+
         return userRepository.findById(id).get().getPosts();
      }
+     public List<Post> bookposts(Long id){
+        return bookrepository.findById(id).get().getPosts();
+     }
+
+     public CustomUser getuser(Long id){
+        return userRepository.findById(id).get();
+     }
+    public void addposttobook(Post post){
+           postRepository.save(post);
+    }
+    public void saveuserimage(Long id,base64 base64){
+       CustomUser user = userRepository.findById(id).get();
+        user.setPic(base64.getBase64());
+        userRepository.save(user);
+    }
+
+    public List<Like> userlikes(Long id){
+        return userRepository.findById(id).get().getLikes();
+    }
+
 
 }
